@@ -7,5 +7,10 @@
 # Running SpliceAI plugin
 --plugin SpliceAI,snv=/home/larissadias/vep-program/plugins/SpliceAI/spliceai_scores.raw.snv.hg19.vcf.gz,indel=/home/larissadias/vep-program/plugins/SpliceAI/spliceai_scores.raw.indel.hg19.vcf
 
+# Running 5UTRannotator
+export PERL5LIB=$PERL5LIB:/home/larissadias/vep-program/plugins/UTRannotator
+
+--plugin UTRannotator,/home/larissadias/vep-program/plugins/UTRannotator/uORF_5UTR_GRCh37_PUBLIC.txt 
+
 # Running all parameters and output as a VCF format 
-vep -i arquivo.vcf -o arquivo_VEP.vcf --hgvs --fasta Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz --cache --cache_version 105 --dir_cache /home/larissadias/vep-program/105_release --plugin dbscSNV,/home/larissadias/vep-program/plugins/dbscSNV/dbscSNV1.1_GRCh37.txt.gz --assembly GRCh37 --plugin MaxEntScan,/home/larissadias/vep-program/plugins/MaxEntScan/fordownload --plugin SpliceAI,snv=/home/larissadias/vep-program/plugins/SpliceAI/spliceai_scores.raw.snv.hg19.vcf.gz,indel=/home/larissadias/vep-program/plugins/SpliceAI/spliceai_scores.raw.indel.hg19.vcf.gz --dir_plugins /home/larissadias/vep-program/plugins/ --offline –-vcf
+vep -i arquivo.vcf -o arquivo_VEP.vcf --hgvs --fasta Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz –-vcf --offline --cache --cache_version 105 --dir_cache /home/larissadias/vep-program/105_release --dir_plugins /home/larissadias/vep-program/plugins/ --plugin dbscSNV,/home/larissadias/vep-program/plugins/dbscSNV/dbscSNV1.1_GRCh37.txt.gz --assembly GRCh37 --plugin MaxEntScan,/home/larissadias/vep-program/plugins/MaxEntScan/fordownload --plugin SpliceAI,snv=/home/larissadias/vep-program/plugins/SpliceAI/spliceai_scores.raw.snv.hg19.vcf.gz,indel=/home/larissadias/vep-program/plugins/SpliceAI/spliceai_scores.raw.indel.hg19.vcf.gz --plugin UTRannotator,/home/larissadias/vep-program/plugins/UTRannotator/uORF_5UTR_GRCh37_PUBLIC.txt 
