@@ -1,0 +1,45 @@
+# Created in Snakemake
+
+VCF = ["1.10_84","17.100_646","24.100_653","31.100_685","39.100_693","46.100_700","53.100_707","60.100_714","68.7G_08_rep","10.100_639","18.100_647","25.100_654","32.100_686","4.100_486","47.100_701","54.100_708","61.100_715","69.10_80","11.100_640","19.100_648","26.100_655","33.100_687","40.100_694","48.100_702","55.100_709","62.100_716","7.100_607","12.100_641","2.100_379","27.100_681","34.100_688","41.100_695","49.100_703","56.100_710","63.GH1","70.10_81","13.100_642","20.100_649","28.100_682","35.100_689","42.100_696","5.100_550","57.100_711","64.LSC","71.10_82","14.100_643","21.100_650","29.100_683","36.100_690","43.100_697","50.100_704","58.100_712","65.RMM","72.10_83","15.100_644","22.100_651","3.100_404","37.100_691","44.100_698","51.100_705","59.100_713","66.7G_04","8.100_637","16.100_645","23.100_652","30.100_684","38.100_692","45.100_699","52.100_706","6.100_574","67.7G_08","9.100_638"]
+
+
+rule all:
+    input:
+        expand("filtered_vcfs/{samples}_filter.vcf", samples=VCF)
+
+rule gunzip:
+    input:
+        "data/{samples}.vcf.gz"
+    output:
+        "data/unzipped_vcfs/{samples}.vcf"
+    log:
+        "logs/gunzip/{samples}.log"
+    shell:
+        "gunzip –c {input} > {output}"
+
+rule vep:
+    input:
+        "data/unzipped_vcfs/{samples}.vcf"
+    output:
+        protected("vep_vfcs/{samples}_VEP.vcf")
+    log:
+        "logs/vep/{samples}_VEP.log"
+    shell:
+        "vep -i {samples}.vcf -o {samples}_VEP.vcf --hgvs --fasta Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz --assembly GRCh37 –-vcf --offline "
+        "--cache --cache_version 105 --dir_cache /home/larissadias/vep-program/105_release --dir_plugins /home/larissadias/vep-program/plugins/ "
+        "--plugin dbscSNV,/home/larissadias/vep-program/plugins/dbscSNV/dbscSNV1.1_GRCh37.txt.gz --plugin MaxEntScan,/home/larissadias/vep-program/plugins/MaxEntScan/fordownload "
+        "--plugin SpliceAI,snv=/home/larissadias/vep-program/plugins/SpliceAI/spliceai_scores.raw.snv.hg19.vcf.gz,indel=/home/larissadias/vep-program/plugins/SpliceAI/spliceai_scores.raw.indel.hg19.vcf.gz "
+        "--plugin UTRannotator,/home/larissadias/vep-program/plugins/UTRannotator/uORF_5UTR_GRCh37_PUBLIC.txt"
+
+rule filter_vep:
+    input:
+        "vep_vfcs/{samples}_VEP.vcf"
+    output:
+        "filtered_vcfs/{samples}_filter.vcf"
+    log:
+        "logs/filter_vep/{samples}_filter.log"
+    shell:
+        "filter_vep -i  {samples}_VEP.vcf -o {samples}_filter.vcf --filter "(ada_score > 0.6 or rf_score > 0.6) or (MaxEntScan_diff >= 3.0) or "
+        "(SpliceAI_pred_DS_AG > 0.5 or SpliceAI_pred_DS_AL > 0.5 or SpliceAI_pred_DS_DG > 0.5 or SpliceAI_pred_DS_DL > 0.5) or "
+        "(five_prime_UTR_variant_consequence is uAUG_gained or five_prime_UTR_variant_consequence is uAUG_lost or five_prime_UTR_variant_consequence is uSTOP_ gained or five_prime_UTR_variant_consequence is uSTOP_lost or five_prime_UTR_variant_consequence is uFrameShift or five_prime_UTR_variant_consequence is uFrameshift) or "
+        "(Consequence is 3_prime_UTR_variant)"
