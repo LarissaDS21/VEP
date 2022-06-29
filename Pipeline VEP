@@ -39,7 +39,7 @@ rule filter_vep:
     log:
         "logs/filter_vep/{samples}_filter.log"
     shell:
-        "filter_vep -i  {samples}_VEP.vcf -o {samples}_filter.vcf --filter "(ada_score > 0.6 or rf_score > 0.6) or (MaxEntScan_diff >= 3.0) or "
-        "(SpliceAI_pred_DS_AG > 0.5 or SpliceAI_pred_DS_AL > 0.5 or SpliceAI_pred_DS_DG > 0.5 or SpliceAI_pred_DS_DL > 0.5) or "
-        "(five_prime_UTR_variant_consequence is uAUG_gained or five_prime_UTR_variant_consequence is uAUG_lost or five_prime_UTR_variant_consequence is uSTOP_ gained or five_prime_UTR_variant_consequence is uSTOP_lost or five_prime_UTR_variant_consequence is uFrameShift or five_prime_UTR_variant_consequence is uFrameshift) or "
-        "(Consequence is 3_prime_UTR_variant)"
+        'filter_vep -i  {samples}_VEP.vcf -o {samples}_filter.vcf --filter "(ada_score > 0.6 or rf_score > 0.6) or (MaxEntScan_diff >= 3.0) or '
+        '(SpliceAI_pred_DS_AG > 0.5 or SpliceAI_pred_DS_AL > 0.5 or SpliceAI_pred_DS_DG > 0.5 or SpliceAI_pred_DS_DL > 0.5) or '
+        '(five_prime_UTR_variant_consequence is uAUG_gained or five_prime_UTR_variant_consequence is uAUG_lost or five_prime_UTR_variant_consequence is uSTOP_ gained or five_prime_UTR_variant_consequence is uSTOP_lost or five_prime_UTR_variant_consequence is uFrameShift or five_prime_UTR_variant_consequence is uFrameshift) or '
+        '(Consequence is 3_prime_UTR_variant)"'
