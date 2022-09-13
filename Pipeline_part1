@@ -1,0 +1,38 @@
+VCF = ["100-966_L6","12-145_L3.1","GRY-182_L4.1","PTC_12_L1.1","SG11894_L2.1"]
+
+rule all:
+    input:
+         expand("Raw_data_varseq/CountVariants/{samples}.txt", samples=VCF)
+
+rule sed:
+    input:
+        "Raw_data_varseq/{samples}.vcf.gz"
+    output:
+        "Raw_data_varseq/{samples}_corrigido.vcf.gz"
+    log:
+        "Raw_data_varseq/logs/sed_vcf_corrigidos/{samples}.log"
+    shell:
+        "zcat {input} | sed 's/ /_/g' | bgzip -c > {output}"
+
+rule tabix:
+    input:
+        "Raw_data_varseq/{samples}_corrigido.vcf.gz"
+    output:
+        "Raw_data_varseq/{samples}_corrigido.vcf.gz.tbi"
+    log:
+        "Raw_data_varseq/logs/tabix_raw_vcfs/{samples}.log"
+    shell:
+        "tabix -p vcf {input}"
+
+rule gatk4:
+    input:
+        "Raw_data_varseq/{samples}_corrigido.vcf.gz"
+        "Raw_data_varseq/{samples}_corrigido.vcf.gz.tbi"
+    output:
+        "Raw_data_varseq/CountVariants/{samples}.txt"
+    conda:
+        "/conda/envs/gatk4"
+    log:
+        "Raw_data_varseq/logs/CountVariants/{samples}.log"
+    shell:
+        "gatk CountVariants -V {input} > {output}"
