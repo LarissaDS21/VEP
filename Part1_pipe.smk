@@ -1,5 +1,5 @@
 #Created in Snakemake
-#Pipeline to config Raw VCFs from VarSeq, after that to count variants and then separate VCFs with at least one variant need to Pipeline part II 
+#Pipeline to config Raw VCFs from VarSeq, after that to count variants and then separate VCFs with at least one variant needed to Pipeline part II 
 
 VCF = open('Raw_data_varseq/{lote}/samples_{lote}.txt').read().strip().split('\n')
 
