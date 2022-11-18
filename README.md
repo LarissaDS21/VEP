@@ -20,11 +20,11 @@ Via Conda or Mamba:
   
 Download your Human Genome Reference sequence:
 - GRCh37/hg19 (release 106): 
-  $ wget -c http://ftp.ensembl.org/pub/grch37/release-106/variation/vep/homo_sapiens_vep_106_GRCh37.tar.gz 
+  $ wget -c http://ftp.ensembl.org/pub/grch37/release-106/variation/vep/homo_sapiens_vep_106_GRCh37.tar.gz \n
   $ tar -xzf homo_sapiens_vep_106_GRCh37.tar.gz
 
 Download the Fasta sequence of Human Genome:
-$ wget -c http://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz /
+$ wget -c http://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz \
 $ gzip -d Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz /
 $ bgzip Homo_sapiens.GRCh37.dna.primary_assembly.fa 
 
