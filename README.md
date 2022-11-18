@@ -14,20 +14,35 @@ Conda or Mamba installed (64-bit for lixux)
 
 # Installation
 Via Conda or Mamba:
-  
 - $ conda install -c bioconda -c conda-forge ensembl-vep
 - $ mamba install -c bioconda -c conda-forge ensembl-vep (faster way)
   
 Download your Human Genome Reference sequence:
 - GRCh37/hg19 (release 106): 
-  $ wget -c http://ftp.ensembl.org/pub/grch37/release-106/variation/vep/homo_sapiens_vep_106_GRCh37.tar.gz \n
-  $ tar -xzf homo_sapiens_vep_106_GRCh37.tar.gz
+  - $ wget -c http://ftp.ensembl.org/pub/grch37/release-106/variation/vep/homo_sapiens_vep_106_GRCh37.tar.gz 
+  - $ tar -xzf homo_sapiens_vep_106_GRCh37.tar.gz
 
 Download the Fasta sequence of Human Genome:
-$ wget -c http://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz \
-$ gzip -d Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz /
-$ bgzip Homo_sapiens.GRCh37.dna.primary_assembly.fa 
+- $ wget -c http://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz \
+- $ gzip -d Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz 
+- $ bgzip Homo_sapiens.GRCh37.dna.primary_assembly.fa 
 
 
 # Usage
 ## Basic Usage
+Running VEP cache, because it is the fastest and most efficient way to use VEP:
+- vep -i arquivo.vcf -o arquivo_VEP.vcf --hgvs --fasta Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz –-vcf --offline --cache --cache_version 105 --dir_cache path/homo_sapiens_vep_106_GRCh37/    
+
+## With Splice + 5'UTR plugins
+Basic usage + --dir_plugins path/plugins/:
+- dbscSNV:
+  - --plugin dbscSNV,path/dbscSNV1.1_GRCh37.txt.gz --assembly GRCh37
+  
+- MaxEntScan (MES):
+  - --plugin MaxEntScan,path/fordownload --fasta Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz
+
+- SpliceAI:
+  - --plugin SpliceAI,snv=path/spliceai_scores.raw.snv.hg19.vcf.gz,indel=path/spliceai_scores.raw.indel.hg19.vcf.gz
+  
+- UTRannotator:
+  - --plugin UTRannotator,path/uORF_5UTR_GRCh37_PUBLIC.txt
